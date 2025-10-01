@@ -31,7 +31,7 @@ A IDE utilizada foi o Visual Studio Code.
 
 Para clonar o projeto, basta executar o seguinte comando:
 
-`git clone https://github.com/joseiscj/eStore.git`  
+`git clone https://github.com/skywalker2077/eStore.git`  
 
 Para instalar as dependências, execute o seguinte comando:
 
