@@ -1,4 +1,4 @@
-# eStore
+# WebStore
 
 ## Descrição
 
