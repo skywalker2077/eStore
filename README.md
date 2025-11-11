@@ -21,28 +21,196 @@ Pensando nisso, foi desenvolvido o **_eStore_**, uma loja virtual, onde é poss�
   - Ver os detalhes do produto, como sua descrição, preço e imagem ampliada.
   - Adicionar o produto ao carrinho de compras.
 
-## Pré requisitos
+## Tecnologias Utilizadas
 
-O Sistema Operacional usado foi o Linux e as tecnologias utilizadas foram HTML, CSS, a LP JavaScript através do framework ReactJS, NodeJS e a API Postman para testar o serviço RESTful por meio do envio de requisições HTTP e da análise do seu retorno.
+### Frontend
+- **React** 16.13.1 - Framework JavaScript
+- **React Router DOM** 5.2.0 - Navegação entre páginas
+- **Bootstrap** 4.5.3 - Framework CSS
+- **Axios** 0.21.0 - Cliente HTTP para requisições API
 
-A IDE utilizada foi o Visual Studio Code.
+### Backend
+- **Node.js** - Runtime JavaScript
+- **Express** 4.17.1 - Framework web
+- **MongoDB** - Banco de dados NoSQL
+- **Mongoose** 5.10.6 - ODM para MongoDB
+- **CORS** - Habilitação de requisições cross-origin
 
-## Execução do projeto
+### DevOps
+- **Docker** & **Docker Compose** - Containerização
+- **Yarn** - Gerenciador de pacotes
 
-Para clonar o projeto, basta executar o seguinte comando:
+## Pré-requisitos
 
-`git clone https://github.com/skywalker2077/eStore.git`  
+- **Node.js** (v14 ou superior)
+- **Yarn** ou **npm**
+- **Docker Desktop** (para rodar MongoDB)
+- Sistema Operacional: Windows, Linux ou macOS
 
-Para instalar as dependências, execute o seguinte comando:
+## Instalação e Execução
 
- `yarn install`
- 
-Depois que as dependências estiverem completamente instaladas, você precisará executar o seguinte comando nos diretórios do cliente e do servidor separadamente:
+### 1. Clonar o Repositório
 
-`yarn start`
+```bash
+git clone https://github.com/skywalker2077/eStore.git
+cd eStore
+```
 
-# Dados via postman
+### 2. Iniciar MongoDB com Docker Compose
 
-Caso prefira adicionar os dados manualmente, abaixo está o link de uma coleção de requests do postman para exportação:
+```bash
+docker-compose up -d mongodb
+```
 
+Isso irá:
+- Baixar a imagem do MongoDB (se necessário)
+- Criar e iniciar o container `estore-mongodb`
+- Expor MongoDB na porta `27017`
+- Criar um volume persistente para os dados
+
+### 3. Instalar Dependências
+
+**Backend:**
+```bash
+cd backend
+yarn install
+```
+
+**Frontend:**
+```bash
+cd ../frontend
+yarn install
+```
+
+### 4. Executar a Aplicação
+
+**Backend (Terminal 1):**
+```bash
+cd backend
+yarn start
+```
+O backend estará disponível em: `http://localhost:3001`
+
+**Frontend (Terminal 2):**
+```bash
+cd frontend
+yarn start
+```
+O frontend estará disponível em: `http://localhost:3000`
+
+## Endpoints da API
+
+### Produtos
+- `GET /produtos` - Lista todos os produtos (com paginação)
+- `GET /produtos/:id` - Busca produto por ID
+- `POST /produtos` - Cria novo produto
+- `PUT /produtos/:id` - Atualiza produto existente
+- `DELETE /produtos/:id` - Remove produto
+
+### Pedidos
+- `GET /pedidos` - Lista todos os pedidos (com paginação)
+- `GET /pedidos/:id` - Busca pedido por ID
+- `POST /pedidos` - Cria novo pedido
+- `DELETE /pedidos/:id` - Remove pedido
+
+## Testando a API
+
+### Com cURL
+
+```bash
+# Listar produtos
+curl http://localhost:3001/produtos
+
+# Listar pedidos
+curl http://localhost:3001/pedidos
+
+# Criar produto (exemplo)
+curl -X POST http://localhost:3001/produtos \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nome": "Produto Teste",
+    "preco": 99.90,
+    "descricao": "Descrição do produto",
+    "categoria": "Eletrônicos"
+  }'
+```
+
+### Com Postman
+
+Importe a coleção de requests:
 `https://drive.google.com/file/d/10xr6nd5AAi27_475YYU7tUg7lw6GSBpB/view?usp=sharing`
+
+## Estrutura do Projeto
+
+```
+eStore/
+├── backend/              # API Node.js + Express
+│   ├── src/
+│   │   ├── controllers/  # Lógica de negócio
+│   │   ├── models/       # Modelos Mongoose
+│   │   └── routes/       # Definição de rotas
+│   ├── app.js           # Configuração Express
+│   ├── server.js        # Servidor HTTP
+│   ├── Dockerfile       # Container backend
+│   └── package.json
+├── frontend/            # Aplicação React
+│   ├── src/
+│   │   ├── components/  # Componentes React
+│   │   ├── context/     # Context API
+│   │   └── services/    # Serviços (API)
+│   ├── public/
+│   └── package.json
+├── docker-compose.yml   # Orquestração de containers
+└── README.md
+```
+
+## Comandos Docker Úteis
+
+```bash
+# Iniciar todos os serviços
+docker-compose up -d
+
+# Parar todos os serviços
+docker-compose down
+
+# Ver logs do MongoDB
+docker logs estore-mongodb
+
+# Acessar MongoDB shell
+docker exec -it estore-mongodb mongosh
+
+# Ver containers rodando
+docker ps
+
+# Remover volumes e containers
+docker-compose down -v
+```
+
+## Troubleshooting
+
+### Porta 3001 já está em uso
+```bash
+# Windows
+netstat -ano | findstr :3001
+taskkill /PID <PID> /F
+
+# Linux/Mac
+lsof -i :3001
+kill -9 <PID>
+```
+
+### MongoDB não conecta
+```bash
+# Verificar se container está rodando
+docker ps | grep mongo
+
+# Reiniciar container
+docker restart estore-mongodb
+
+# Ver logs
+docker logs estore-mongodb
+```
+
+## Licença
+
+ISC
